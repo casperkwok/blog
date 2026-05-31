@@ -1,0 +1,14 @@
+node_modules/
+db/*.sqlite
+tmp/
+.DS_Store
+
+# 环境变量（含密钥，勿提交）
+.env
+.env.*
+!.env.example
+
+# 构建/缓存产物
+.next/
+dist/
+*.tsbuildinfo

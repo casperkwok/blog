@@ -1,0 +1,9 @@
+node_modules
+.git
+.gitignore
+.DS_Store
+dist
+*.log
+deploy.sh
+README.md
+.nvmrc
