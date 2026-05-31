@@ -336,6 +336,29 @@ a {
   }
 }
 
+/* 宽屏：TOC 移到正文右侧 gutter，固定常驻，去掉盒子背景 */
+@media (min-width: 1300px) {
+  .toc {
+    position: fixed;
+    top: 96px;
+    left: calc(50% + 384px); /* 正文半宽 360 + 间距 24 */
+    width: 232px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0 0 0 16px;
+    background: none;
+    border: none;
+    border-left: 1px solid var(--border-soft);
+  }
+  .toc ul {
+    columns: 1;
+  }
+  .toc li {
+    font-size: 13px;
+  }
+}
+
 .prose {
   padding-top: 36px;
   font-size: 17px;
