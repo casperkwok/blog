@@ -48,6 +48,7 @@ run_container() {  # $1=name  $2=hostport
         ${ENV_FILE:+--env-file $ENV_FILE} \
         -e NODE_ENV=production \
         -e PORT=$CONTAINER_PORT \
+        -v "$(pwd)/content:/app/content:ro" \
         --restart unless-stopped \
         $NEW_IMAGE_TAG
 }

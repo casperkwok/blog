@@ -75,16 +75,27 @@ function loadAll(): Post[] {
   return posts
 }
 
-// 开发模式下每次读盘（便于改文章即时生效）；生产读一次缓存。
+// 按 content/posts 目录的 mtime 做缓存：文件增删改导致目录 mtime 变化时自动重载。
+// 这样把 content/ 挂成数据卷后，git pull 新文章即时生效，无需重新部署。
 let cache: Post[] | null = null
-const isProd = process.env.NODE_ENV === 'production'
+let cacheKey = ''
 
 export function getAllPosts(): Post[] {
-  if (isProd) {
-    cache ??= loadAll()
-    return cache
+  let key = ''
+  try {
+    const st = fs.statSync(POSTS_DIR)
+    // 同时纳入各文件 mtime，连「改已有文章」也能即时刷新
+    const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith('.md'))
+    key = `${st.mtimeMs}:${files
+      .map((f) => `${f}@${fs.statSync(path.join(POSTS_DIR, f)).mtimeMs}`)
+      .join(',')}`
+  } catch {
+    key = 'none'
   }
-  return loadAll()
+  if (cache && cacheKey === key) return cache
+  cache = loadAll()
+  cacheKey = key
+  return cache
 }
 
 export function getPost(slug: string): Post | undefined {
