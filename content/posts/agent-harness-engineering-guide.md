@@ -353,10 +353,10 @@ TOOLS = [
 模型靠描述来决定何时调用工具。模糊的描述 = 错误调用 = 生产事故。
 
 ```python
-# ❌ 模糊描述（模型不知道什么时候用）
+# 模糊描述（模型不知道什么时候用）
 {"name": "fn", "description": "does stuff"}
 
-# ✅ 清晰描述（包含：做什么、何时用、何时不用）
+# 清晰描述（包含：做什么、何时用、何时不用）
 {
   "name": "read_file",
   "description": "Read the contents of a file. "
@@ -1236,10 +1236,10 @@ def autonomous_agent(name: str, bus: MessageBus, task_manager: TaskManager):
 上下文压缩（s06）之后，Agent 可能忘记自己是谁（identity）。`identity` 字符串必须在每次新的 Agent 循环中重新注入 system prompt，不能只在第一次注入：
 
 ```python
-# ❌ 错误：只在初始化时设置一次
+# 错误：只在初始化时设置一次
 system_prompt = f"You are {name}."  # 上下文压缩后 agent 可能忘记这个
 
-# ✅ 正确：每次 agent_loop 调用时都传入
+# 正确：每次 agent_loop 调用时都传入
 result = agent_loop(
     query="...",
     system_prompt=f"You are {name}. Current task: {task['subject']}.",  # 每次刷新
@@ -1822,40 +1822,17 @@ Agent 自行扩展任务范围（"既然要改这个，我顺便把相关的也�
 │  +── 护栏（确定性约束）                                     │
 │  +── 可观测性（Trace + 评测）                               │
 │                                                            │
-│                 🧠 LLM（智能核心，无状态）                   │
+│                 LLM（智能核心，无状态）                   │
 └────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 25. 参考资料
+## 参考
 
-**核心仓库：**
-- [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code)（58K+ Stars，本文核心教学来源）
-- [shareAI-lab/claw0](https://github.com/shareAI-lab/claw0)（生产级 Agent 网关，10 个核心概念）
-- [shareAI-lab/mini-claude-code](https://github.com/shareAI-lab/mini-claude-code)（最小化实现，5 个版本）
+本文以 [learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) 为主要脉络，并参考了 Anthropic 工程博客（*Effective Harnesses for Long-Running Agents*、*Building Effective AI Agents*）与 Mitchell Hashimoto 提出 “harness engineering” 一词的文章。
 
-**Anthropic 官方资料：**
-- Anthropic Engineering, *Effective Harnesses for Long-Running Agents*, Nov 2025 & Mar 2026
-- Anthropic, *Building Effective AI Agents*, Dec 2025
-- Claude Code 官方文档：子 Agent、Skills、Tasks 系统
+延伸阅读：
 
-**OpenAI 官方资料：**
-- Ryan Lopopolo, *Harness Engineering: Leveraging Codex in an Agent-First World*, Feb 2026
-- OpenAI, *Shell + Skills + Compaction: Tips for Long-Running Agents*, 2026
-
-**学术论文：**
-- Zhang et al., *General Modular Harness for LLM Agents in Multi-Turn Gaming Environments*, ICML 2025
-- *Agent Harness for Large Language Model Agents: A Survey*, Preprints.org, Apr 2026
-- *Natural-Language Agent Harnesses*, arXiv, Mar 2026
-
-**社区资源：**
-- [VILA-Lab/Dive-into-Claude-Code](https://github.com/VILA-Lab/Dive-into-Claude-Code)（Claude Code 源码深度分析）
-- [ai-boost/awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering)（持续更新资源列表）
-- [Picrew/awesome-agent-harness](https://github.com/Picrew/awesome-agent-harness)
-
-**关键工程博客：**
-- Mitchell Hashimoto, *Harness Engineering*, Feb 2026（术语正式起源）
-- Adnan Masood, *Agent Harness Engineering — The Rise of the AI Control Plane*, Medium, Apr 2026
-- Aakash Gupta, *2025 Was Agents. 2026 Is Agent Harnesses*, Jan 2026
-- George Sung, *Tracing Claude Code's LLM Traffic*, Medium, Jan 2026（Claude Code 内部流量追踪）
+- [shareAI-lab/claw0](https://github.com/shareAI-lab/claw0) — 生产级 Agent 网关
+- [shareAI-lab/mini-claude-code](https://github.com/shareAI-lab/mini-claude-code) — 最小化实现，逐步叠加机制

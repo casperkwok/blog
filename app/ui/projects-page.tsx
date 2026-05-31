@@ -39,7 +39,7 @@ function ProjectRow(handle: Handle<{ proj: Project }>) {
       <>
         <div class="proj-head">
           <span class="proj-name">{proj.name}</span>
-          {proj.private && <span class="proj-tag">🔒 private</span>}
+          {proj.private && <span class="proj-tag">私有</span>}
         </div>
         <p class="proj-desc">{proj.desc}</p>
       </>
