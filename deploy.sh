@@ -1,7 +1,7 @@
 #!/bin/bash
 # Casper's Blog 零停机部署脚本（参考 xiaoliang-web）
 # 用法：在服务器项目目录执行 ./deploy.sh
-# 反代 + HTTPS 由 1Panel 管理（站点指向 127.0.0.1:44100）
+# 反代 + HTTPS 由 1Panel 管理（站点指向 127.0.0.1:44200）
 
 set -e
 
@@ -11,8 +11,9 @@ CONTAINER_NAME="casper-blog"
 NEW_CONTAINER_NAME="casper-blog-new"
 IMAGE_TAG="casper-blog:latest"
 NEW_IMAGE_TAG="casper-blog:new"
-PORT=44100
-TEMP_PORT=44101
+CONTAINER_PORT=44100        # 容器内监听端口
+PORT=44200                  # 宿主正式端口（避开 aura/xiaoliang）
+TEMP_PORT=44201             # 宿主临时端口
 NETWORK="1panel-network"
 
 # 环境变量文件
@@ -43,10 +44,10 @@ run_container() {  # $1=name  $2=hostport
     docker run -d \
         --name "$1" \
         --network $NETWORK \
-        -p 127.0.0.1:$2:$PORT \
+        -p 127.0.0.1:$2:$CONTAINER_PORT \
         ${ENV_FILE:+--env-file $ENV_FILE} \
         -e NODE_ENV=production \
-        -e PORT=$PORT \
+        -e PORT=$CONTAINER_PORT \
         --restart unless-stopped \
         $NEW_IMAGE_TAG
 }

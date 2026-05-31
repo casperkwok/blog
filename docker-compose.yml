@@ -4,8 +4,8 @@ services:
     container_name: casper-blog
     restart: unless-stopped
     ports:
-      # 只监听本地，反代 + HTTPS 交给 1Panel
-      - "127.0.0.1:44100:44100"
+      # 宿主 44200（避开 aura-web 的 44100 / aura-api 8081 / xiaoliang 3000）；容器内 44100
+      - "127.0.0.1:44200:44100"
     networks:
       - 1panel-network
     env_file:
