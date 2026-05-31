@@ -10,6 +10,26 @@ export function renderMarkdown(body: string): RemixNode {
   return <>{renderBlocks(tokens)}</>
 }
 
+export interface TocItem {
+  depth: number
+  text: string
+  id: string
+}
+
+// 提取 h2 / h3 标题用于生成目录；id 与正文标题锚点一致。
+export function extractToc(body: string): TocItem[] {
+  const out: TocItem[] = []
+  for (const token of marked.lexer(body)) {
+    if (token.type === 'heading') {
+      const t = token as Tokens.Heading
+      if (t.depth === 2 || t.depth === 3) {
+        out.push({ depth: t.depth, text: t.text, id: slugifyHeading(t.text) })
+      }
+    }
+  }
+  return out
+}
+
 function renderBlocks(tokens: Token[]): RemixNode[] {
   return tokens.map((token, i) => renderBlock(token, i))
 }
